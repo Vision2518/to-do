@@ -1,37 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <input id="task" placeholder="enter a new task">
-    <ul id="tasklist">
-    </ul>
-    <button id="add-task">
-Add Task
-    </button>
+  </head>
+  <body>
+    <input id="task" placeholder="enter a new task" />
+    <ul id="tasklist"></ul>
+    <button id="add-task">Add Task</button>
     <script>
-        const task=document.getElementById("task");
-        const tasklist=document.getElementById("tasklist");
-        const button=document.getElementById("add-task");
-        button.addEventListener("click",function(){
-           if(task.value.trim()===""){}
-           else {
-              const item=document.createElement("li");
-              const delButton=document.createElement("button");
-              delButton.textContent="delete task"
-              delButton.addEventListener("click",function(){
-                item.remove();
-              })
-              item.textContent=task.value;
-              item.appendChild(delButton);
-            tasklist.appendChild(item);
+      let editingTask = null;
+      const task = document.getElementById("task");
+      const tasklist = document.getElementById("tasklist");
+      const button = document.getElementById("add-task");
+      button.addEventListener("click", function () {
+        if (task.value.trim() === "") {
+          return;
+        } else {
+            if(editingTask !== null)
+        {
+            editingTask.textContent=task.value;
             task.value="";
+            editingTask=null;
+            button.textContent="Add Task"
+            return;
         }
-          
-        })
+          const item = document.createElement("li");
+          const taskText = document.createElement("span");
+          const cancelButton=document.createElement("button")
+          cancelButton.style.display = "none";
+          const delButton = document.createElement("button");
+          const editButton = document.createElement("button");
+          taskText.textContent = task.value;
+          cancelButton.textContent="Cancel edit"
+          editButton.textContent = "Edit Task";
+          cancelButton.addEventListener("click" ,function(){
+            task.value="";
+            editingTask=null;
+            button.textContent="Add Task";
+            cancelButton.style.display="none"
+          })
+          editButton.addEventListener("click", function () {
+            task.value = taskText.textContent;
+            editingTask = taskText;
+            cancelButton.style.display="inline";
+            button.textContent="save edit"
+          });
+          delButton.textContent = "delete task";
+          delButton.addEventListener("click", function () {
+            item.remove();
+          });
+          item.appendChild(taskText);
+          item.appendChild(cancelButton);
+          item.appendChild(editButton);
+          item.appendChild(delButton);
+          tasklist.appendChild(item);
+          task.value = "";
+        }
+      });
     </script>
-</body>
+  </body>
 </html>
