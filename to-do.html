@@ -20,7 +20,13 @@ Add Task
            if(task.value.trim()===""){}
            else {
               const item=document.createElement("li");
-            item.textContent=task.value;
+              const delButton=document.createElement("button");
+              delButton.textContent="delete task"
+              delButton.addEventListener("click",function(){
+                item.remove();
+              })
+              item.textContent=task.value;
+              item.appendChild(delButton);
             tasklist.appendChild(item);
             task.value="";
         }
