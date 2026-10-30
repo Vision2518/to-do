@@ -7,58 +7,37 @@
   </head>
   <body>
     <input id="task" placeholder="enter a new task" />
-    <ul id="tasklist"></ul>
+    <ul id="taskList"></ul>
     <button id="add-task">Add Task</button>
     <script>
-      let editingTask = null;
-      const task = document.getElementById("task");
-      const tasklist = document.getElementById("tasklist");
-      const button = document.getElementById("add-task");
-      button.addEventListener("click", function () {
-        if (task.value.trim() === "") {
-          return;
-        } else {
-            if(editingTask !== null)
-        {
-            editingTask.textContent=task.value;
-            task.value="";
-            editingTask=null;
-            button.textContent="Add Task"
-            return;
-        }
-          const item = document.createElement("li");
-          const taskText = document.createElement("span");
-          const cancelButton=document.createElement("button")
-          cancelButton.style.display = "none";
-          const delButton = document.createElement("button");
-          const editButton = document.createElement("button");
-          taskText.textContent = task.value;
-          cancelButton.textContent="Cancel edit"
-          editButton.textContent = "Edit Task";
-          cancelButton.addEventListener("click" ,function(){
-            task.value="";
-            editingTask=null;
-            button.textContent="Add Task";
-            cancelButton.style.display="none"
-          })
-          editButton.addEventListener("click", function () {
-            task.value = taskText.textContent;
-            editingTask = taskText;
-            cancelButton.style.display="inline";
-            button.textContent="save edit"
-          });
-          delButton.textContent = "delete task";
-          delButton.addEventListener("click", function () {
-            item.remove();
-          });
-          item.appendChild(taskText);
-          item.appendChild(cancelButton);
-          item.appendChild(editButton);
-          item.appendChild(delButton);
-          tasklist.appendChild(item);
-          task.value = "";
-        }
-      });
+      let editingTask=null;
+      const taskInput = document.getElementById("task");
+      const taskList = document.getElementById("taskList");
+      const addTaskButton = document.getElementById("add-task");
+      const addTask = () => {
+        if (taskInput.value.trim() === "") return;
+        const item = document.createElement("li");
+        const delButton = document.createElement("button");
+        const editButton=document.createElement('button');
+        delButton.textContent = "Delete";
+        item.textContent = taskInput.value;
+        taskInput.value = "";
+        taskList.appendChild(item);
+        editButton.textContent = "Edit";
+        editButton.addEventListener('click',()=>editTask(item));
+        delButton.addEventListener("click",()=>{deleteButton(item)});
+        item.appendChild(editButton);
+        item.appendChild(delButton);
+      };
+      const deleteButton = (item) => {
+        item.remove();
+      };
+      const editTask = (item) => {
+        editingTask = item;
+        taskInput.value = editingTask.textContent;
+        addTaskButton.textContent = "Update Task";
+      };
+      addTaskButton.addEventListener("click", addTask);
     </script>
   </body>
 </html>
